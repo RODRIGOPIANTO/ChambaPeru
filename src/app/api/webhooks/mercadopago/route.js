@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { NextResponse } from 'next/server';
 
