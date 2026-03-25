@@ -1,0 +1,96 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CANDIDATE
+  EMPLOYER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  role          Role      @default(CANDIDATE)
+  
+  // Perfil Candidato
+  avatarUrl     String?
+  cvUrl         String?   // PDF subido
+  extractedSkills String? // Guardado por la IA parser
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  companyProfile CompanyProfile?
+  applications   Application[]
+}
+
+model CompanyProfile {
+  id            String    @id @default(uuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id])
+  
+  companyName   String
+  description   String?   @db.Text
+  logoUrl       String?
+  videoUrl      String?   // Employer branding video
+  website       String?
+
+  jobs          Job[]
+  subscriptions Subscription[]
+}
+
+model Job {
+  id            String    @id @default(uuid())
+  title         String
+  description   String    @db.Text
+  location      String
+  salaryMin     Int?
+  salaryMax     Int?
+  mode          String    // Remoto, Presencial, Hibrido
+  
+  // Relacionado si es oferta directa, null si es scrapeada
+  companyId     String?
+  company       CompanyProfile? @relation(fields: [companyId], references: [id])
+  
+  // Origen para el bot scraper
+  source        String    @default("Directo") 
+  isPromoted    Boolean   @default(false)
+  
+  createdAt     DateTime  @default(now())
+  applications  Application[]
+}
+
+model Application {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id])
+  
+  status    String   @default("EN_REVISION")
+  createdAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+}
+
+model Subscription {
+  id             String         @id @default(uuid())
+  companyId      String
+  company        CompanyProfile @relation(fields: [companyId], references: [id])
+  
+  plan           String         // "DESTACADO" o "ACCESO_CVS"
+  status         String         @default("PENDING")
+  mpPreferenceId String?        // Mercado Pago
+  paymentId      String?
+  
+  createdAt      DateTime       @default(now())
+}

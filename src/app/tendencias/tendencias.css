@@ -1,0 +1,55 @@
+/* Utilidades específicas para /tendencias */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: 1fr; }
+
+@media (min-width: 768px) {
+  .md-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .lg-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.text-blue-400 { color: #60a5fa; }
+.bg-blue-500\/20 { background-color: rgba(59, 130, 246, 0.2); }
+.text-green-400 { color: #4ade80; }
+.bg-green-500\/20 { background-color: rgba(34, 197, 94, 0.2); }
+.text-purple-400 { color: #c084fc; }
+.bg-purple-500\/20 { background-color: rgba(168, 85, 247, 0.2); }
+
+.hover-border-primary {
+  transition: border-color 0.2s;
+}
+.hover-border-primary:hover {
+  border-color: var(--accent-primary);
+}
+
+.chart-card .recharts-default-tooltip {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* Layout para Stats Summary */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
